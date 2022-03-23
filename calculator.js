@@ -8,7 +8,6 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-
 function getCurrentUIValues() {
   return {
     amount: +document.getElementById("loan-amount").value,
@@ -16,31 +15,53 @@ function getCurrentUIValues() {
     rate: +document.getElementById("loan-rate").value,
   };
 }
-
 // Get the inputs from the DOM.
 // Put some default values in the inputs
 // Call a function to calculate the current monthly payment
 function setupIntialValues() {
-  let initialNumbers = getCurrentUIValues();
-  let initialAmount = initialNumbers.amount;
-  let initialTerm = initialNumbers.years;
-  let initialYearlyRate = initialNumbers.rate;
-  let monthlyPaymentNumerator = initialAmount * initialYearlyRate;
-  let monthlyPaymentDenomenator = Math.pow(1 + initialYearlyRate, -initialTerm);
-  monthlyPaymentDenomenator = 1 - monthlyPaymentDenomenator;
-  let monthlyPayment = monthlyPaymentNumerator / monthlyPaymentDenomenator;
-  console.log(monthlyPayment);
+  initialValues = getCurrentUIValues();
+  let amountInput = document.getElementById("loan-amount");
+  initialValues.amount = 5000;
+  amountInput.value = initialValues.amount;
+  let yearsInput = document.getElementById("loan-years");
+  initialValues.years = 20;
+  yearsInput.value = initialValues.years = 5;
+  let rateInput = document.getElementById("loan-rate");
+  initialValues.rate = 2.7;
+  rateInput.value = initialValues.rate;
+  update();
 }
-
 // Get the current values from the UI
 // Update the monthly payment
-function update() {}
-
+function update() {
+  let interfaceInput = getCurrentUIValues();
+  updateMonthly(calculateMonthlyPayment(interfaceInput));
+}
 // Given an object of values (a value has amount, years and rate ),
 // calculate the monthly payment.  The output should be a string
 // that always has 2 decimal places.
-function calculateMonthlyPayment(values) {}
-
+function calculateMonthlyPayment(values) {
+  let monthlyRate = values.rate / 100 / 12;
+  let n = Math.floor(values.years * 12);
+  let amount = values.amount;
+  let finalAmount = (
+    (monthlyRate * amount) /
+    (1 - Math.pow(1 + monthlyRate, -n))
+  ).toFixed(2);
+  if (n == "0") {
+    finalAmount = "Please fill in Years";
+    return finalAmount;
+  } else {
+    return finalAmount;
+  }
+}
 // Given a string representing the monthly payment value,
 // update the UI to show the value.
-function updateMonthly(monthly) {}
+function updateMonthly(monthly) {
+  let monthlyText = document.getElementById("monthly-payment");
+  if (monthly == "NaN") {
+    monthlyText.innerText = "Please enter values";
+  } else {
+    monthlyText.innerText = `$ ${monthly}`;
+  }
+}
