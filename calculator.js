@@ -51,6 +51,12 @@ function calculateMonthlyPayment(values) {
   if (n == "0") {
     finalAmount = "Please fill in Years";
     return finalAmount;
+  } else if (amount == 0) {
+    finalAmount = "Please fill in a amount";
+    return finalAmount;
+  } else if (monthlyRate == 0) {
+    finalAmount = "Please fill in a rate";
+    return finalAmount;
   } else {
     return finalAmount;
   }
@@ -59,9 +65,5 @@ function calculateMonthlyPayment(values) {
 // update the UI to show the value.
 function updateMonthly(monthly) {
   let monthlyText = document.getElementById("monthly-payment");
-  if (monthly == "NaN") {
-    monthlyText.innerText = "Please enter values";
-  } else {
-    monthlyText.innerText = `$ ${monthly}`;
-  }
+  monthlyText.innerText = `$ ${monthly}`;
 }
